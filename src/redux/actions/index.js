@@ -1,5 +1,6 @@
 import streams from "../../apis/streams";
 import {Types} from "./types";
+import history from "../../history";
 
 export const signIn = (userId) => ({
 	type: Types.SIGN_IN,
@@ -14,6 +15,7 @@ export const createStream = formValues => async (dispatch, getState) => {
 	const {userId} = getState().auth;
 	const response = await streams.post('/streams', {...formValues, userId})
 	dispatch({type: Types.CREATE_STREAM, payload: response.data})
+	history.push('/')
 }
 
 export const fetchStreams = () => async dispatch => {
@@ -29,13 +31,15 @@ export const fetchStream = id => async dispatch => {
 }
 
 export const updateStream = (id, values) => async dispatch => {
-	const response = await streams.put(`/streams/${id}`, values)
+	const response = await streams.patch(`/streams/${id}`, values)
 
 	dispatch({type: Types.UPDATE_STREAM, payload: response.data})
+	history.push('/')
 }
 
 export const deleteStream = id => async dispatch => {
 	await streams.delete(`/streams/${id}`)
+	history.push('/')
 
 	dispatch({type: Types.DELETE_STREAM, payload: id})
 }

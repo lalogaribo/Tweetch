@@ -3,17 +3,17 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {fetchStreams} from "../../redux/actions";
 
-class StreamList extends React.Component{
+class StreamList extends React.Component {
 	componentDidMount() {
 		this.props.fetchStreams()
 	}
 
 	renderAdminButtons(stream) {
-		if (stream.userId === this.props.currentUser.userId){
-			return(
+		if (stream.userId === this.props.currentUser.userId) {
+			return (
 				<div className="right floated content">
-					<button className="ui button primary">Edit</button>
-					<button className="ui button negative">Delete</button>
+					<Link className="ui button primary" to={`/streams/edit/${stream.id}`}>Edit</Link>
+					<Link className="ui button negative" to={`/streams/delete/${stream.id}`}>Delete</Link>
 				</div>
 			)
 		}
@@ -24,7 +24,7 @@ class StreamList extends React.Component{
 			return (
 				<div className="item" key={stream.id}>
 					{this.renderAdminButtons(stream)}
-					<i className="large middle aligned icon camera" />
+					<i className="large middle aligned icon camera"/>
 					<div className="content">
 						{stream.title}
 						<div className="description">{stream.description}</div>
@@ -35,7 +35,7 @@ class StreamList extends React.Component{
 	}
 
 	renderCreate() {
-		if(this.props.currentUser.isSignedIn){
+		if (this.props.currentUser.isSignedIn) {
 			return (
 				<div>
 					<Link to='/streams/new' className='ui button primary'>
@@ -45,7 +45,8 @@ class StreamList extends React.Component{
 			)
 		}
 	}
-	render(){
+
+	render() {
 		return (
 			<div>
 				<header>Streams</header>
@@ -57,8 +58,10 @@ class StreamList extends React.Component{
 		)
 	}
 }
+
 const mapStateToProps = state => {
-	return {streams: Object.values(state.streams),
+	return {
+		streams: Object.values(state.streams),
 		currentUser: state.auth
 	}
 }
